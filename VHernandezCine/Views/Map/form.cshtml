@@ -32,15 +32,15 @@
                         @Html.LabelFor(model => model.Direccion)
                         @Html.TextBoxFor(model => model.Direccion, new { @class = "form-control", @id = "txtDireccion"})
                         @Html.ValidationMessageFor(model=>model.Direccion)
-                        @Html.Label(null, "",new{@class="lblApellidoPaterno"})
+                       
                     </div>
 
                     <div class="col-md-4">
 
                         @Html.LabelFor(model => model.Ventas)
-                        @Html.TextBoxFor(model => model.Ventas, new { @class = "form-control", @id = "txtApellidoMaterno"})
+                        @Html.TextBoxFor(model => model.Ventas, new { @class = "form-control", @id = "txtVentas"})
                         @Html.ValidationMessageFor(model=>model.Ventas)
-                        @Html.Label(null, "",new{@class="lblApellidoMaterno"})
+                        
                     </div>
                     <div class="col-md-4">
                         @Html.LabelFor(model => model.Zona.Zonas)
@@ -59,18 +59,17 @@
                 </div>
                 <div class="row">
                     <div class="col-md-4">
-                        <input type="text" id="txtLat" class="form-control" placeholder="latitud">
+                        <input type="text" id="txtLatitud" class="form-control; visually-hidden" placeholder="latitud">
 
                     </div>
                     <div class="col-md-4">
-                        <input type="text" id="txtLng" class="form-control" placeholder="longitud">
+                        <input type="text" id="txtLongitud" class="form-control; visually-hidden" placeholder="longitud">
 
                     </div>
                    
                 </div>
                 <hr />
-                <div id="map_canvas" style="height:350px">
-                </div>
+                <div id="map" style="height:300px; width:50%;"></div>
 
             }
 
@@ -78,17 +77,66 @@
        
     </div>
     <hr />
-    @*<div class="row">
-        <div class="col">
-            <input class="btn btn-success" type="button" value="Mapa" onclick="VerMapa()" />
-        </div>
-        <hr />
-        <div id="map" style="width:100%; height:400px;"></div>
-    </div>
-*@
+   
+
     </body>
     </html>
-<script>
+
+
+
+<script type="text/javascript">
+    function initMap() {
+        if ($("#txtLatitud").val() == 0 && $("#txtLongitud").val() == 0) {
+            myLatlng = { lat: 19.4278907, lng: -99.1666573 };
+        } else {
+            myLatlng = { lat: parseFloat($("#txtLatitud").val()), lng: parseFloat($("#txtLongitud").val()) };
+        }
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 14,
+            center: myLatlng,
+        });
+        // Create the initial InfoWindow.
+        let infoWindow = new google.maps.InfoWindow({
+            content: "Presiona la locación",
+            position: myLatlng,
+        });
+        infoWindow.open(map);
+        // Configure the click listener.
+        //obtener direccion
+        google.maps.event.addListener(map, 'click', function (event) {
+            var geocoder = new google.maps.Geocoder();
+            geocoder.geocode({
+                'latLng': event.latLng
+            }, function (results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    if (results[0]) {
+                        $("#txtDireccion").val(results[0].formatted_address);
+                    }
+                }
+            });
+        });
+        //obtener cordenadas
+        map.addListener("click", (mapsMouseEvent) => {
+            // Close the current InfoWindow.
+            infoWindow.close();
+            // Create a new InfoWindow.
+            infoWindow = new google.maps.InfoWindow({
+                position: mapsMouseEvent.latLng,
+            });
+            infoWindow.setContent(
+                JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+            );
+            infoWindow.open(map);
+            var Latitud = mapsMouseEvent.latLng.lat();
+            var Longitud = mapsMouseEvent.latLng.lng();
+            $("#txtLatitud").val(Latitud);
+            $("#txtLongitud").val(Longitud);
+        });
+    }
+    window.initMap = initMap;
+    
+</script>
+@*<script>
     var vMarker
     var map
     map = new google.maps.Map(document.getElementById('map_canvas'), {
@@ -109,45 +157,40 @@
     map.setCenter(vMarker.position);
     vMarker.setMap(map);
 
-    $("#txtCiudad, #txtEstado, #txtDireccion").change(function () {
+    $("#txtDireccion").change(function () {
         movePin();
     });
 
     function movePin() {
         var geocoder = new google.maps.Geocoder();
-        var textSelectM = $("#txtCiudad").text();
-        var textSelectE = $("#txtEstado").val();
-        var inputAddress = $("#txtDireccion").val() + ' ' + textSelectM + ' ' + textSelectE;
+        var inputAddress = $("#txtDireccion").val();
         geocoder.geocode({
             "address": inputAddress
         }, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
                 vMarker.setPosition(new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()));
                 map.panTo(new google.maps.LatLng(results[0].geometry.location.lat(), results[0].geometry.location.lng()));
+
                 $("#txtLat").val(results[0].geometry.location.lat());
                 $("#txtLng").val(results[0].geometry.location.lng());
             }
 
         });
     }
-</script>
-    @*<script type="text/javascript">
-        function VerMapa() {
-            var defectAdress = new google.maps.LatLng(19.4278907, -99.1666573);
-            var mapOptions = {
-                center: defectAdress,
-                zoom: 20,
+    google.maps.event.addListener(map, 'click', function (event) {
+        var geocoderr = new google.maps.Geocoder();
+        geocoderr.geocode({
+            'latLng': event.latLng
+        }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                if (results[0]) {
+                    $("#txtDireccion").val(results[0].formatted_address);
+                }
+            }
+        });
+    });
 
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            var mapa = new google.maps.Map(document.getElementById("map"), mapOptions);
-            var marcador = new google.maps.Marker({
-                position: myAddress,
-                animation: google.maps.Animation.BOUNCE,
-            });
-
-            marcador.setMap(mapa);
-        }
-    </script>*@
+</script>*@
+   
 </div>
 

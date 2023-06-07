@@ -47,7 +47,7 @@
                     <td style="text-align:center;vertical-align:middle;">
                         <a class="btn btn-warning"
                        href="@Url.Action("GetById", "Map", new {IdCine=Depa.IdCine})">
-                            <i class="bi bi-pencil-square"></i>
+                            <i class="bi bi-pencil-square"></i>Ver
                         </a>
                     </td>
                     <td>@Depa.Nombre</td>
@@ -56,7 +56,7 @@
                     <td>@Depa.Ventas</td>
                     <td style="text-align:center; vertical-align:middle;">
                         <a class="btn btn-danger bi bi-trash-fill" href="@Url.Action("Delete","Map",new {IdCine=Depa.IdCine})"
-                       onclick="return confirm('Estas seguro de que deseas eliminar el usuario? ');"></a>
+                       onclick="return confirm('Estas seguro de que deseas eliminar el Cine? ');">Eliminar</a>
                     </td>
                 </tr>
             }
@@ -64,31 +64,12 @@
     </table>
 
 
-    <div class="row">
-    <div class="col">
-    <input class="btn btn-success" type="button" value="Mapa"  onclick="VerMapa()"/>
-    </div>
-    <div id="map" style="width:100%; height:400px;"></div>
-    </div>
+   
+   
 
 </body>
 </html>
 
-<script type="text/javascript">
-    function VerMapa(){
-        var defectAdress = new google.maps.LatLng(19.4278907, -99.1666573);
-        var mapOptions = {
-            center: defectAdress,
-            zoom: 20,
 
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-        var mapa = new google.maps.Map(document.getElementById("map"), mapOptions);
-        var marcador = new google.maps.Marker({
-            position: myAddress,
-            animation: google.maps.Animation.BOUNCE,
-        });
 
-        marcador.setMap(mapa);
-    }
-</script>
+

@@ -9,6 +9,7 @@ namespace VHernandezCine.Controllers
         {
             ML.Cine cine = new ML.Cine();
             ML.Result result = BL.Cines.GetAll();
+            ML.Result resultVentas = BL.PromedioVentas.Promedio(cine.IdZona);
             
             if (result.Correct)
             {
@@ -120,6 +121,11 @@ namespace VHernandezCine.Controllers
                 ViewBag.Message = "Ocurrio un error en la consulta" + result.ErrorMessage;
                 return View("Modal");
             }
+        }
+
+        public IActionResult Ventas()
+        {
+            return View();
         }
     }
 }
