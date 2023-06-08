@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using ML;
 
 namespace VHernandezCine.Controllers
 {
@@ -9,11 +10,11 @@ namespace VHernandezCine.Controllers
         {
             ML.Cine cine = new ML.Cine();
             ML.Result result = BL.Cines.GetAll();
-            ML.Result resultVentas = BL.PromedioVentas.Promedio(cine.IdZona);
+            ML.Result resultVentas = BL.Cines.Promedio();
             
             if (result.Correct)
             {
-        
+                cine.PromedioVentas = resultVentas.Objects;
                 cine.Cines = result.Objects;
             }
             else
@@ -125,7 +126,22 @@ namespace VHernandezCine.Controllers
 
         public IActionResult Ventas()
         {
-            return View();
+            ML.Result result = BL.Cines.GetAll();
+            ML.Cine cine = new ML.Cine();
+            ML.Result resultVentas = BL.Cines.Promedio();
+            cine.PromedioVentas = new List<object>();
+
+            if (result.Correct)
+            {
+                cine.Cines = result.Objects;
+                cine.PromedioVentas = resultVentas.Objects;
+               
+            }
+            else
+            {
+                ViewBag.Message = "Ha ocurrido un error con exito" + result.ErrorMessage;
+            }
+            return View(cine);
         }
     }
 }

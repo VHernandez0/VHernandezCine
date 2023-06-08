@@ -14,8 +14,13 @@ namespace ML
         public int IdZona { get; set; }
         public decimal Ventas { get; set; }
         public string NombreZona { get; set; }
-        public decimal Promedio { get; set; }
+        public decimal Promedio1 { get; set; }
+        public decimal Promedio2 { get; set; }
+        public decimal Promedio3 { get; set; }
+        public decimal Promedio4 { get; set; }
+        public decimal Promedio5 { get; set; }
         public List<object> Cines { get; set; }
+        public List<object> PromedioVentas { get; set; }
         public ML.Zona Zona { get; set; }
     }
 }
