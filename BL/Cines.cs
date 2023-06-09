@@ -26,6 +26,8 @@ namespace BL
                         cine.Direccion = row.Direccion;
                         cine.IdZona = row.IdZona.Value;
                         cine.Ventas = row.Ventas.Value;
+                        cine.Latitud = row.Latitud;
+                        cine.Longitud = row.Longitud;
                         
                         result.Objects.Add(cine);
                     }
@@ -51,7 +53,7 @@ namespace BL
             {
                 using (DL.CinesContext context = new DL.CinesContext())
                 {
-                    int RowsAffected = context.Database.ExecuteSqlRaw($"AddCine '{cine.Nombre}','{cine.Direccion}',{cine.Zona.IdZona},{cine.Ventas}");
+                    int RowsAffected = context.Database.ExecuteSqlRaw($"AddCine '{cine.Nombre}','{cine.Direccion}',{cine.Zona.IdZona},{cine.Ventas},'{cine.Latitud}', '{cine.Longitud}'");
 
 
                     if (RowsAffected > 0)
@@ -93,6 +95,8 @@ namespace BL
                         cine.Ventas = query.Ventas.Value;
                         cine.Zona = new ML.Zona();
                         cine.Zona.IdZona = query.IdZona.Value;
+                        cine.Latitud = query.Latitud;
+                        cine.Longitud = query.Longitud;
 
                         result.Object = cine;
 
@@ -158,7 +162,7 @@ namespace BL
             {
                 using (DL.CinesContext context = new DL.CinesContext())
                 {
-                    int RowsAffected = context.Database.ExecuteSqlRaw($"UpdateCine {cine.IdCine},'{cine.Nombre}','{cine.Direccion}',{cine.Zona.IdZona},{cine.Ventas}");
+                    int RowsAffected = context.Database.ExecuteSqlRaw($"UpdateCine {cine.IdCine},'{cine.Nombre}','{cine.Direccion}',{cine.Zona.IdZona},{cine.Ventas},'{cine.Latitud}','{cine.Longitud}'");
 
                     if (RowsAffected > 0)
                     {

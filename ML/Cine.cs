@@ -20,6 +20,8 @@ namespace ML
         public decimal Promedio4 { get; set; }
         public decimal Promedio5 { get; set; }
         public List<object> Cines { get; set; }
+        public string Latitud { get; set; }
+        public string Longitud { get; set; }
         public List<object> PromedioVentas { get; set; }
         public ML.Zona Zona { get; set; }
     }

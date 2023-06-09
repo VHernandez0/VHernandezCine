@@ -15,5 +15,9 @@ public partial class Cine
 
     public decimal? Ventas { get; set; }
 
+    public string? Latitud { get; set; }
+
+    public string? Longitud { get; set; }
+
     public virtual Zona? IdZonaNavigation { get; set; }
 }

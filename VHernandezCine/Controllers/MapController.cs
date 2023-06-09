@@ -141,7 +141,9 @@ namespace VHernandezCine.Controllers
             {
                 ViewBag.Message = "Ha ocurrido un error con exito" + result.ErrorMessage;
             }
-            return View(cine);
+            return View(cine); 
         }
+
+        
     }
 }

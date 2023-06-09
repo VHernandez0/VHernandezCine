@@ -20,10 +20,10 @@
         <div class="col-md-6">
             <div id="chartContainer"></div>
         </div>
-       @* <div class="col-md-6">
+        <div class="col-md-6">
             <h1 class="text-center" style="text-shadow: 0 0 4px #4800ff;"> Puntos de venta</h1>
             <div id="map" style="width: 500px; height: 350px; border: 3px solid green; left: 100px;"></div>
-        </div>*@
+        </div>
     </div>
 
     <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
@@ -59,7 +59,74 @@
             });
             chart.render();
         }
-        </script>
+        function initMap() {
+            if ($("#txtLatitud").val() == 0 && $("#txtLongitud").val() == 0) {
+
+                myLatlng = { lat: 19.59761, lng: -99.18054 };
+            } else {
+
+                myLatlng = { lat: 19.59761, lng: -99.18054 };
+            }
+
+            const map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 11,
+                center: myLatlng,
+            });
+        @foreach (ML.Cine cine in Model.Cines)
+        {
+            <text>
+                                var contentString = '<div id="content">' +
+                    '<div id="siteNotice">' +
+                    '</div>' +
+                    'Direccion: ' + '@cine.Direccion' +
+                    '<div id="bodyContent">' +
+                    'Ventas:' + '@cine.Ventas' + "<br>" +
+                    'Zona:' + '@cine.IdZona' + "<br>" +
+                    'ID:' + '@cine.IdCine' + "<br>" +
+                    '</div>' +
+                    '</div>';
+
+
+                var marker_@cine.IdCine = new google.maps.Marker({ position: { lat: @cine.Latitud, lng: @cine.Longitud }, map: map });
+
+                (marker_@cine.IdCine).addlistener("click", function () {
+                    (infowindow_@cine.IdCine).open(map, marker_@cine.IdCine);
+            });
+            var infowindow_@cine.IdCine = new google.maps.InfoWindow({
+                content: contentString,
+                ariaLabel: "Cines",
+            });
+            </text>
+        }
+
+
+
+        @*(infowindow_@model.id).open(map);*@
+            // Configure the click listener.
+
+        @*'marker'+'@Model.ID'.addListener("click", function () {
+            infoWindow.open(map, marker);
+            });*@
+
+                            //map.addListener("click", (mapsMouseEvent) => {
+                            //    // Close the current InfoWindow.
+                            //    infoWindow.close();
+                            //    // Create a new InfoWindow.
+                            //    infoWindow = new google.maps.InfoWindow({
+                            //        position: mapsMouseEvent.latLng,
+                            //    });
+                            //    infoWindow.setContent(
+                            //        JSON.stringify(mapsMouseEvent.latLng.toJSON(), null, 2)
+                            //    );
+
+                            //    infoWindow.open(map);
+                            //});
+                        }
+
+
+        window.initMap = initMap;
+    </script>
+
 </body>
 </html>
 

@@ -37,6 +37,8 @@
                 <td class="text-center" style="font-weight:bold;">Nombre</td>
                 <td class="text-center" style="font-weight:bold;">Direccion</td>
                 <td class="text-center" style="font-weight:bold;">Ventas</td>
+                <td class="text-center" style="font-weight:bold;">Latitud</td>
+                <td class="text-center" style="font-weight:bold;">Longitud</td>
                 <td class="text-center" style="font-weight:bold;">Eliminar</td>
             </tr>
         </thead>
@@ -54,6 +56,8 @@
 
                     <td>@Depa.Direccion</td>
                     <td>@Depa.Ventas</td>
+                    <td>@Depa.Latitud</td>
+                    <td>@Depa.Longitud</td>
                     <td style="text-align:center; vertical-align:middle;">
                         <a class="btn btn-danger bi bi-trash-fill" href="@Url.Action("Delete","Map",new {IdCine=Depa.IdCine})"
                        onclick="return confirm('Estas seguro de que deseas eliminar el Cine? ');">Eliminar</a>
