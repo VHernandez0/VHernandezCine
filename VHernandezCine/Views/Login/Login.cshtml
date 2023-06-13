@@ -5,36 +5,42 @@
 
 <!DOCTYPE html>
 <head>
-
     <link rel="stylesheet" href="/css/estilos.css">
-   
 
 </head>
 <div class="form-structor">
-	@using (Html.BeginForm("Login", "Login", FormMethod.Post, new { enctype = "multipart/form-data" }))
-        {
+	
 	<div class="signup">
-		<h2 class="text-align:center" id="signup"><span>O </span>Registrate</h2>
+		@using (Html.BeginForm("Login", "Login", FormMethod.Post, new { enctype = "multipart/form-data" }))
+		{
+		<h2 class="form-title" id="signup">Registrate</h2>
+			
 		<div class="form-holder">
-			<input type="text" class="input" placeholder="Nombre" />
-			<input type="email" class="input" placeholder="Correo" />
-			<input type="password" class="input" placeholder="Contraseña" />
-				<input type="text" class="input" placeholder="UserName" />
-				
-				
+			<input type="text" class="input" placeholder="Nombre" name="Nombre"/>
+			<input type="text" class="input" placeholder="Apellido Paterno" name="ApellidoPaterno"/>
+				<input type="text" class="input" placeholder="Apellido Materno" name="ApellidoMaterno" />
+			<input type="email" class="input" placeholder="Correo" name="Correo"/>
+			<input type="password" class="input" placeholder="Contraseña" name="Password"/>
+				<input type="text" class="input" placeholder="UserName" name="UserName"/>	
 		</div>
 		<button class="submit-btn">Ingresar</button>
+		}
 	</div>
+	@using (Html.BeginForm("Login", "Login", FormMethod.Post, new { enctype = "multipart/form-data" }))
+			{
 	<div class="login slide-up">
+			
 		<div class="center">
-			<h2 class="form-title" id="login"><span>O </span>Ingresa</h2>
+			<h2 class="form-title" id="login">Ingresa</h2>
 				
 			<div class="form-holder">
-				<input type="text" class="input" placeholder="UserName" name="UserName" />
-				<input type="password" class="input" placeholder="Contraseña" name="Password" />
+					<input type="text" class="input" placeholder="UserName" name="UserName" />
+					<input type="password" class="input" placeholder="Contraseña" name="Password" />
+					@Html.ActionLink("Olvide Mi Contraseña", "RecuperarPassword", "Login")
 			</div>
 			<button class="submit-btn">Entrar</button>
 		</div>
+			
 	</div>
 	}
 </div>
