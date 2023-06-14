@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
+using System.Net.Mail;
+using System.Web;
 
 namespace BL
 {
@@ -155,8 +157,8 @@ namespace BL
             {
                 using (DL.CinesContext context = new DL.CinesContext())
                 {
-                    int RowsAffected = context.Database.ExecuteSqlRaw($"UpdatePassword '{Correo}'", "@Password", new SqlParameter("@Password", Password) );
-
+                    int RowsAffected = context.Database.ExecuteSqlRaw($"UpdatePassword '{Correo}', @Password", new SqlParameter("@Password", Password));
+                    
                     if (RowsAffected > 0)
                     {
                         result.Correct = true;
@@ -176,6 +178,8 @@ namespace BL
 
             return result;
         }
+
+       
 
     }
 }

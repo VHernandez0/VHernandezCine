@@ -15,9 +15,19 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllerRoute(
+        name: "RecuperarPassword",
+        pattern: "Login/NewPassword/{Correo}",
+        defaults: new { controller = "Login", action = "NewPassword" });
 
-app.MapControllerRoute(
+    app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Login}/{action=Login}/{id?}");
+
+});
+
+
 
 app.Run();

@@ -1,11 +1,27 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Mail;
 using System.Security.Cryptography;
+using System.Web;
+using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace VHernandezCine.Controllers
 {
     public class LoginController : Controller
     {
+
+        private IHostingEnvironment environment;
+        private IConfiguration configuration;
+
+        public LoginController(IHostingEnvironment _environment, IConfiguration _configuration)
+
+        {
+
+            environment = _environment;
+            configuration = _configuration;
+        }
+
+
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -40,10 +56,7 @@ namespace VHernandezCine.Controllers
                
                     return RedirectToAction("Index", "Home");
            
-            }
-            
-
-            
+            } 
         }
         [HttpGet]
         public IActionResult RecuperarPassword()
@@ -58,21 +71,21 @@ namespace VHernandezCine.Controllers
             
             if (result.Correct)
             {
-                string EmailOrigen = "v.hernandez.r00@gmail.com";
+                string EmailOrigen = configuration["EmailOrigen"];
                 MailMessage mailMessage = new MailMessage(EmailOrigen, Correo, "Recuperar Contraseña", "<p>Correo para recuperar contraseña</p>");
                 mailMessage.IsBodyHtml = true;
-                string ContenidoHTML = System.IO.File.ReadAllText(@"C:\Users\digis\Documents\Victor Hernandez Reyes\VHernandezCine\VHernandezCine\Views\Login\Correo.cshtml");
-                mailMessage.Body = ContenidoHTML+Correo;
+                string ContenidoHTML = System.IO.File.ReadAllText(configuration["ContenidoHTML"]);
+                mailMessage.Body = ContenidoHTML;
+                string url = configuration["URL"] + HttpUtility.UrlEncode(Correo);
+                mailMessage.Body = mailMessage.Body.Replace("{url}", url);
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
                 smtpClient.EnableSsl = true;
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.Port = 587;
-                smtpClient.Credentials = new System.Net.NetworkCredential(EmailOrigen, "pkslccmhnjgfxvmd");
+                smtpClient.Credentials = new System.Net.NetworkCredential(EmailOrigen, configuration["Password"]);
                
                 smtpClient.Send(mailMessage);
                 smtpClient.Dispose();
-
-               
                 ViewBag.Message = "Se ha enviado un correo de confirmación a tu correo electronico";
                 return View("Modal");
             }
@@ -91,14 +104,14 @@ namespace VHernandezCine.Controllers
         }
 
         [HttpPost]
-        public IActionResult NewPassword(string Password1,string Password2, string UserName)
+        public IActionResult NewPassword(string Password1,string Password2, string Correo)
         {
             if (Password1==Password2)
             {
                 var passencrypt = new Rfc2898DeriveBytes(Password1, new byte[0], 1000, HashAlgorithmName.SHA256);
                 var passconvertd = passencrypt.GetBytes(20);
 
-                ML.Result result = BL.Usuario.UpdatePassword(UserName, passconvertd);
+                ML.Result result = BL.Usuario.UpdatePassword(Correo, passconvertd);
                 if (result.Correct)
                 {
                     ViewBag.Message = "Se ha actualizado con exito";
