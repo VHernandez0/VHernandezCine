@@ -51,10 +51,20 @@ namespace VHernandezCine.Controllers
             }
             else
             {
-                
-                usuario = (ML.Usuario)result.Object;
-               
+                ML.Result resultP = BL.Usuario.GetUserName(usuario);
+                usuario = (ML.Usuario)resultP.Object;
+                if (usuario.Password.SequenceEqual(passconvertd))
+                {
+                    
+
                     return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ViewBag.Message = "La contraseña no coincide";
+                    return View("Modal");
+                }
+               
            
             } 
         }
