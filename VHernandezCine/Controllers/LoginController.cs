@@ -12,14 +12,15 @@ namespace VHernandezCine.Controllers
         private IHostingEnvironment environment;
         private IConfiguration configuration;
 
-        public LoginController(IHostingEnvironment _environment, IConfiguration _configuration)
+      
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
+        public LoginController(IWebHostEnvironment hostingEnvironment, IConfiguration _configuration, IHostingEnvironment _environment)
         {
-
+            _hostingEnvironment = hostingEnvironment;
             environment = _environment;
             configuration = _configuration;
         }
-
 
 
         [HttpGet]
@@ -84,16 +85,22 @@ namespace VHernandezCine.Controllers
                 string EmailOrigen = configuration["EmailOrigen"];
                 MailMessage mailMessage = new MailMessage(EmailOrigen, Correo, "Recuperar Contraseña", "<p>Correo para recuperar contraseña</p>");
                 mailMessage.IsBodyHtml = true;
-                string ContenidoHTML = System.IO.File.ReadAllText(configuration["ContenidoHTML"]);
-                mailMessage.Body = ContenidoHTML;
-                string url = configuration["URL"] + HttpUtility.UrlEncode(Correo);
+                //string ContenidoHTML = System.IO.File.ReadAllText(configuration["ContenidoHTML"]);
+                string contenidoHTML = System.IO.File.ReadAllText(Path.Combine(_hostingEnvironment.ContentRootPath, "wwwroot", "Template", "Mail.html"));
+                mailMessage.Body = contenidoHTML;
+                string url = "http://192.168.0.211/Login/NewPassword/" + HttpUtility.UrlEncode(Correo);
+
                 mailMessage.Body = mailMessage.Body.Replace("{url}", url);
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com");
                 smtpClient.EnableSsl = true;
                 smtpClient.UseDefaultCredentials = false;
                 smtpClient.Port = 587;
                 smtpClient.Credentials = new System.Net.NetworkCredential(EmailOrigen, configuration["Password"]);
+
                
+                
+
+
                 smtpClient.Send(mailMessage);
                 smtpClient.Dispose();
                 ViewBag.Message = "Se ha enviado un correo de confirmación a tu correo electronico";

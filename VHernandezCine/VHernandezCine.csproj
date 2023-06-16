@@ -31,4 +31,8 @@
     <ProjectReference Include="..\ML\ML.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\Template\Mail.html" />
+  </ItemGroup>
+
 </Project>
